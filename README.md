@@ -59,7 +59,7 @@ Database bebas (SQL atau NoSQL).
 1. **File Proto**: Berisi definisi layanan gRPC yang Anda bangun.
 2. **Server gRPC**: Berfungsi sebagai backend service untuk aplikasi Sistem Manajemen Buku.
 3. **Endpoint gRPC**: Harus diakses melalui URL Google Cloud, contoh: http://url-google-cloud.com/
-4. **Swagger Documentation**: Tampilkan dokumentasi service gRPC Anda menggunakan Swagger.
+4. **Swagger Documentation**: Tampilkan dokumentasi service gRPC dan API Anda menggunakan Swagger.
 5. **Job Scheduling**: Tugas otomatis untuk memperbarui status buku secara berkala jika belum dikembalikan.
 6. **Unit Test**: Pengujian untuk memastikan beberapa fungsi penting berjalan dengan baik.
 7. **Deployment Documentation**: Sertakan langkah-langkah deployment ke Google Cloud menggunakan Docker image.
