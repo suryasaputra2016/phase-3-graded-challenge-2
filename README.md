@@ -64,13 +64,6 @@ Database bebas (SQL atau NoSQL).
 6. **Unit Test**: Pengujian untuk memastikan beberapa fungsi penting berjalan dengan baik.
 7. **Deployment Documentation**: Sertakan langkah-langkah deployment ke Google Cloud menggunakan Docker image.
 
-## Assignment Objective
-Graded Challenge 2 ini dibuat guna mengevaluasi pemahaman gRPC sebagai berikut:
-- Mampu memahami konsep gRPC
-- Mampu membuat service dengan gRPC
-- Mampu melakukan pengujian dengan unit testing
-- Mampu melakukan deployment ke Google Cloud dengan menggunakan docker image
-
 
 ### Additional Notes
 Total Points : 100
