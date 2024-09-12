@@ -2,7 +2,67 @@
 
 Graded Challenge ini dibuat guna mengevaluasi pembelajaran pada Hacktiv8 Program Fulltime Golang khususnya pada pembelajaran grpc dan implementasi auth dengan Tema :
 
-`REST API menggunakan gRPC dengan sistem autentikasi untuk Sistem Manajemen Tugas.`
+`REST API menggunakan gRPC dengan Autentikasi untuk Sistem Manajemen Buku`
+
+## **Assignment Objective**  
+Graded Challenge 2 ini dibuat untuk mengevaluasi pemahaman Anda terkait konsep gRPC sebagai berikut:
+- Mampu memahami konsep gRPC.
+- Mampu membuat service dengan gRPC.
+- Mampu mengimplementasikan Unit Testing
+- Mampu melakukan deployment ke Google Cloud menggunakan Docker image.
+
+## **Assignment Directions**
+
+Anda akan membangun sebuah Sistem Manajemen Buku dengan REST API berbasis gRPC dan autentikasi. Sistem ini mengelola data buku, pengguna, dan memungkinkan pengguna untuk menambahkan, menghapus, atau memperbarui buku yang dimiliki.
+
+Tugas Anda meliputi:
+1. **Buat file proto** untuk mendefinisikan layanan gRPC dengan pesan (message) yang sesuai.
+2. **Implementasikan server gRPC** untuk layanan Sistem Manajemen Buku dalam Golang.
+3. **Tambahkan autentikasi menggunakan token JWT** untuk memastikan hanya pengguna terdaftar yang dapat mengelola buku.
+4. **Dokumentasikan seluruh service menggunakan Swagger.**
+5. **Lakukan deployment ke Google Cloud** menggunakan Docker image.
+6. **Lakukan pengujian menggunakan unit testing** untuk minimal 3 fungsi.
+7. **Implementasikan fitur job scheduling** untuk secara otomatis memperbarui status buku yang sudah kadaluarsa atau belum dikembalikan sesuai batas waktu.
+8. **Lakukan pengujian/testing pada minimal 3 function dari keseluruhan project
+
+## **Database Schema**
+Database bebas (SQL atau NoSQL).
+
+### Tabel Users:
+- ID (UUID): Identifikasi unik pengguna.
+- Username (String): Nama pengguna.
+- Password (String): Kata sandi yang di-hash.
+
+### Tabel Books:
+- ID (UUID): Identifikasi unik buku.
+- Title (String): Judul buku.
+- Author (String): Penulis buku.
+- PublishedDate (Timestamp): Tanggal terbit buku.
+- Status (String): Status buku (Available, Borrowed).
+- UserID (UUID): ID pengguna yang meminjam buku.
+
+### Tabel BorrowedBooks:
+- ID (UUID): Identifikasi unik peminjaman.
+- BookID (UUID): ID buku yang dipinjam.
+- UserID (UUID): ID pengguna yang meminjam.
+- BorrowedDate (Timestamp): Tanggal peminjaman.
+- ReturnDate (Timestamp): Tanggal pengembalian (null jika belum dikembalikan).
+
+## **Fitur Wajib:**
+1. **Autentikasi menggunakan JWT**: Hanya pengguna yang terdaftar yang dapat mengakses dan memanipulasi data buku.
+2. **Job Scheduling**: Implementasikan fitur job scheduling yang memperbarui status buku yang belum dikembalikan setelah melewati tenggat waktu peminjaman.
+3. **Deployment ke GCP**: Setelah aplikasi berjalan dengan baik secara lokal, Anda harus melakukan deployment ke Google Cloud dan membuat aplikasi dapat diakses secara publik.
+4. **Unit Test**: Buat unit test minimal untuk 3 fungsi utama dalam aplikasi Anda.
+5. **Docker**: Kontainerisasi aplikasi Anda menggunakan Docker. Pastikan menyediakan Dockerfile dan dokumentasi singkat mengenai bagaimana cara menjalankan aplikasi ini menggunakan Docker.
+
+## **Expected Output:**
+1. **File Proto**: Berisi definisi layanan gRPC yang Anda bangun.
+2. **Server gRPC**: Berfungsi sebagai backend service untuk aplikasi Sistem Manajemen Buku.
+3. **Endpoint gRPC**: Harus diakses melalui URL Google Cloud, contoh: http://url-google-cloud.com/
+4. **Swagger Documentation**: Tampilkan dokumentasi service gRPC Anda menggunakan Swagger.
+5. **Job Scheduling**: Tugas otomatis untuk memperbarui status buku secara berkala jika belum dikembalikan.
+6. **Unit Test**: Pengujian untuk memastikan beberapa fungsi penting berjalan dengan baik.
+7. **Deployment Documentation**: Sertakan langkah-langkah deployment ke Google Cloud menggunakan Docker image.
 
 ## Assignment Objective
 Graded Challenge 2 ini dibuat guna mengevaluasi pemahaman gRPC sebagai berikut:
@@ -11,59 +71,13 @@ Graded Challenge 2 ini dibuat guna mengevaluasi pemahaman gRPC sebagai berikut:
 - Mampu melakukan pengujian dengan unit testing
 - Mampu melakukan deployment ke Google Cloud dengan menggunakan docker image
 
-## Assignment Directions
 
- - Buat proto file untuk definisi layanan gRPC dengan pesan (message) yang sesuai.
- - Implementasikan server gRPC untuk layanan yang dibuat dalam Golang.
- - Tambahkan auth menggunakan token JWT.
- - Dokumentasikan keseluruhan service dengan Swagger
- - Lakukan pengujian menggunakan unit testing minimal 3 function
- - Setelah aplikasi running maka lakukan deployment dengan Google Cloud menggunakan docker image
+### Additional Notes
+Total Points : 100
 
-## Database Schema:
-Database bebas (sql or no sql)
-### Tabel Users:
- - ID (UUID): Identifikasi unik pengguna.
- - Username (String): Nama pengguna.
- - Password (String): Kata sandi yang di-hash.
+Deadline : Diinformasikan oleh instruktur saat briefing GC. Keterlambatan pengumpulan tugas mengakibatkan skor GC 2 menjadi 0.
 
-### Tabel Tasks:
+Informasi yang tidak dicantumkan pada file ini harap dipastikan/ditanyakan kembali kepada instruktur. Kesalahan asumsi dari peserta mungkin akan menyebabkan kesalahan pemahaman requirement dan mengakibatkan pengurangan nilai.
 
- - ID (UUID): Identifikasi unik tugas.
- - Title (String): Judul tugas.
- - Description (Text): Deskripsi tugas.
- - DueDate (Timestamp): Tanggal jatuh tempo tugas.
- - UserID (UUID): ID pengguna yang membuat tugas.
-
-
- #### Sebagai tambahan dari requirement yang sudah diberikan sebelumnya, Student juga diharapkan untuk memahami dan menerapkan konsep-konsep berikut:
-- Cloud Deployment using GCP
-Student diharapkan untuk mengimplementasikan Cloud Deployment menggunakan Google Cloud Platform (GCP).
-Pastikan aplikasi Anda dapat diakses secara publik setelah deployment.
-Sediakan dokumentasi sederhana mengenai langkah-langkah deployment yang Anda lakukan.
-- Job Scheduling
-Implementasikan konsep job scheduling untuk beberapa proses yang memerlukannya, seperti proses pembaharuan data atau pembersihan data yang tidak diperlukan.
-- Unit Test
-Buat unit test untuk memastikan bahwa setiap fungsi atau method dalam aplikasi Anda bekerja dengan semestinya.
-- Docker
-Kontainerisasi aplikasi Anda menggunakan Docker.
-Pastikan Anda menyediakan Dockerfile dan dokumentasi singkat tentang bagaimana menjalankan aplikasi Anda menggunakan Docker.
-
-
-## Database Requirements
-
-![Alt text](db.png)
-
-Buatlah database dengan skema mengikuti sample struct yang ada pada gambar diatas!
-
-
-## Expected Result 
-### Image hanya sample
- - File Proto.
-   <img width="842" alt="image" src="https://github.com/H8-FTGO-P3/FTGO-P3-V1-GC2/assets/134502566/0dc710bc-a417-406d-98b3-20e329ae6404">
-
-- Endpoint gRPC menggunakan url Google Cloud, contoh : http://url-google-cloud.com/
-  <img width="627" alt="image" src="https://github.com/H8-FTGO-P3/FTGO-P3-V1-GC2/assets/134502566/5571ab9f-a203-44b4-ae3c-6f93bf681b62">
-
-- Dokumentasi API Swagger.
-  <img width="983" alt="image" src="https://github.com/H8-FTGO-P3/FTGO-P3-V1-GC2/assets/134502566/156ecb65-857d-426e-87f2-a48b27f66417">
+### Deployment Notes
+- Deployed url: _________ (isi dengan url hasil deployment anda)
