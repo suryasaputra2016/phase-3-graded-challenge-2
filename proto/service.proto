@@ -1,16 +1,18 @@
 syntax = "proto3";
 
-package auth;
+package books;
 option go_package = "/pb;pb";
 
-service AuthService {
-    rpc SayHello (HelloRequest) returns (HelloResponse);
+service UserService {
+    rpc CheckRegistrationData (userData) returns ();
+    rpc CreateNewUser (userData) returns (UserName);
 }
 
-message HelloRequest {
-    string name = 1;
+message UserData {
+    string username = 1;
+    string password = 2;
 }
 
-message HelloResponse {
-    string message = 1;
+message UserName {
+    string username = 1;
 }

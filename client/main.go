@@ -5,7 +5,7 @@ import (
 	"github.com/suryasaputra2016/phase-3-graded-challenge-2/client/handlers"
 )
 
-// @title Library
+// @title Book Library
 // @version 1.0
 // @description Hacktiv8 Phase 3 Graded challenge 2
 // @termsOfService http://swagger.io/terms/

@@ -3,14 +3,14 @@ package repos
 import (
 	"context"
 
-	"github.com/suryasaputra2016/phase-3-graded-challenge-2/userserver/configs"
-	"github.com/suryasaputra2016/phase-3-graded-challenge-2/userserver/entities"
+	"github.com/suryasaputra2016/phase-3-graded-challenge-2/server/configs"
+	"github.com/suryasaputra2016/phase-3-graded-challenge-2/server/entities"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
 // Create User
 func CreateUser(newUser entities.User) error {
-	collection, err := configs.ConnectionDatabase(context.Background())
+	collection, err := configs.UserDatabase(context.Background())
 	if err != nil {
 		return err
 	}
@@ -25,7 +25,7 @@ func CreateUser(newUser entities.User) error {
 
 // Get User by username
 func GetUserByUsername(userName string) error {
-	collection, err := configs.ConnectionDatabase(context.Background())
+	collection, err := configs.UserDatabase(context.Background())
 	if err != nil {
 		return err
 	}

@@ -7,9 +7,9 @@ import (
 
 	// pb "go-grpc-server/pb"
 
-	"github.com/suryasaputra2016/phase-3-graded-challenge-2/userserver/entities"
-	"github.com/suryasaputra2016/phase-3-graded-challenge-2/userserver/repos"
-	"github.com/suryasaputra2016/phase-3-graded-challenge-2/userserver/utils"
+	"github.com/suryasaputra2016/phase-3-graded-challenge-2/server/entities"
+	"github.com/suryasaputra2016/phase-3-graded-challenge-2/server/repos"
+	"github.com/suryasaputra2016/phase-3-graded-challenge-2/server/utils"
 )
 
 type Server struct {
