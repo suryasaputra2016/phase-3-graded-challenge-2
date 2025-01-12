@@ -17,7 +17,7 @@ type UserHandler interface {
 type userHandler struct {
 }
 
-// NewUserHandler takes user service and returns new user handler
+// NewUserHandler returns new user handler
 func NewUserHandler() *userHandler {
 	return &userHandler{}
 }
@@ -27,11 +27,11 @@ func NewUserHandler() *userHandler {
 // @Tags user
 // @Accept json
 // @Produce json
-// @Param register-data body entity.RegisterRequest true "register request"
+// @Param register-data body entities.RegisterRequest true "register request"
 // @Success 201 {object} entity.RegisterRepsonse
 // @Router /register [post]
-// @Failure 400 {object} entity.ErrorMessage
-// @Failure 500 {object}  entity.ErrorMessage
+// @Failure 400 {object} entities.ErrorMessage
+// @Failure 500 {object}  entities.ErrorMessage
 func (uh *userHandler) Register(c echo.Context) error {
 	// bind request body
 	var req entities.RegisterRequest
@@ -63,11 +63,11 @@ func (uh *userHandler) Register(c echo.Context) error {
 // @Tags user
 // @Accept json
 // @Produce json
-// @Param login-data body entity.LoginRequest true "login request"
-// @Success 200 {object} entity.LoginResponse
+// @Param login-data body entities.LoginRequest true "login request"
+// @Success 200 {object} entities.LoginResponse
 // @Router /login [post]
-// @Failure 400 {object} entity.ErrorMessage
-// @Failure 500 {object}  entity.ErrorMessage
+// @Failure 400 {object} entities.ErrorMessage
+// @Failure 500 {object}  entities.ErrorMessage
 func (uh *userHandler) Login(c echo.Context) error {
 	// bind request body
 	var req entities.LoginRequest

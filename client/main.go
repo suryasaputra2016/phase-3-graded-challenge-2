@@ -23,13 +23,14 @@ func main() {
 	// token := "Bearer 1234"
 
 	userHandler := handlers.NewUserHandler()
+	bookHandler := handlers.NewBookHandler()
 
 	e.POST("/users/register", userHandler.Register)
 	e.POST("/users/login", userHandler.Login)
-	// e.GET("/books/all", handlr.ShowBooks)
-	// e.GET("/books/borrowed", handlr.ShowBorrowedBooks)
-	// e.POST("/books/borrow/:bookId", handlr.Borrow)
-	// e.PUT("/books/return/:bookId", handlr.Return)
+	e.GET("/books/all", bookHandler.ShowAllBooks)
+	e.GET("/books/borrowed", bookHandler.ShowBorrowedBooks)
+	e.POST("/books/borrow", bookHandler.BorrowABook)
+	e.PUT("/books/return", bookHandler.ReturnABook)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
