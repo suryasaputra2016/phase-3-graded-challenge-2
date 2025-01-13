@@ -1,0 +1,273 @@
+basePath: /
+definitions:
+  entities.BorrowBookRequest:
+    properties:
+      book_id:
+        type: string
+    required:
+    - book_id
+    type: object
+  entities.BorrowBookResponse:
+    properties:
+      book_author:
+        type: string
+      book_title:
+        type: string
+      message:
+        type: string
+    required:
+    - book_author
+    - book_title
+    - message
+    type: object
+  entities.ErrorMessage:
+    properties:
+      error:
+        type: string
+    required:
+    - error
+    type: object
+  entities.LoginRequest:
+    properties:
+      password:
+        type: string
+      user_name:
+        type: string
+    required:
+    - password
+    - user_name
+    type: object
+  entities.LoginResponse:
+    properties:
+      message:
+        type: string
+      token:
+        type: string
+    required:
+    - message
+    - token
+    type: object
+  entities.RegisterRequest:
+    properties:
+      password:
+        type: string
+      user_name:
+        type: string
+    required:
+    - password
+    - user_name
+    type: object
+  entities.RegisterResponse:
+    properties:
+      message:
+        type: string
+      user_name:
+        type: string
+    required:
+    - message
+    - user_name
+    type: object
+  entities.ReturnBookRequest:
+    properties:
+      book_id:
+        type: string
+    required:
+    - book_id
+    type: object
+  entities.ReturnBookResponse:
+    properties:
+      author:
+        type: string
+      message:
+        type: string
+      title:
+        type: string
+    required:
+    - author
+    - message
+    - title
+    type: object
+  entities.ShowAllBooksResponse:
+    properties:
+      author:
+        type: string
+      book_id:
+        type: string
+      published_date:
+        type: string
+      status:
+        type: string
+      title:
+        type: string
+    required:
+    - author
+    - book_id
+    - published_date
+    - status
+    - title
+    type: object
+  entities.ShowBorrowedBooksResponse:
+    properties:
+      book_id:
+        type: string
+      published_date:
+        type: string
+    required:
+    - book_id
+    - published_date
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: sayasuryasaputra@gmail.com
+    name: Surya Saputra
+  description: Hacktiv8 Phase 3 Graded challenge 2
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Book Library
+  version: "1.0"
+paths:
+  /books:
+    get:
+      description: Show Borrowed Books in the library
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.ShowBorrowedBooksResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorMessage'
+      summary: Show Borrowed Books
+      tags:
+      - books
+  /books/borrow:
+    post:
+      consumes:
+      - application/json
+      description: Borrow One Book
+      parameters:
+      - description: borrowbook request
+        in: body
+        name: borrow-book-data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.BorrowBookRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.BorrowBookResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorMessage'
+      security:
+      - JWT: []
+      summary: Borrow A Book
+      tags:
+      - books
+  /books/return:
+    put:
+      consumes:
+      - application/json
+      description: Return One Book
+      parameters:
+      - description: returnbook request
+        in: body
+        name: return-book-data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.ReturnBookRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.ReturnBookResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorMessage'
+      security:
+      - JWT: []
+      summary: Return A Book
+      tags:
+      - books
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login user
+      parameters:
+      - description: login request
+        in: body
+        name: login-data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorMessage'
+      summary: Login
+      tags:
+      - user
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user
+      parameters:
+      - description: register request
+        in: body
+        name: register-data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entities.RegisterResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorMessage'
+      summary: Register
+      tags:
+      - user
+swagger: "2.0"

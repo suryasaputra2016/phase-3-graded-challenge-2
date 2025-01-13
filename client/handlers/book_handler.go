@@ -69,12 +69,12 @@ func (bh *bookHandler) BorrowABook(c echo.Context) error {
 // @Tags books
 // @Accept json
 // @Produce json
-// @Param return-book-data body entites.ReturnBookRequest true "returnbook request"
+// @Param return-book-data body entities.ReturnBookRequest true "returnbook request"
 // @Security JWT
 // @Success 200 {object} entities.ReturnBookResponse
 // @Router /books/return [put]
-// @Failure 400 {object} entity.ErrorMessage
-// @Failure 500 {object}  entity.ErrorMessage
+// @Failure 400 {object} entities.ErrorMessage
+// @Failure 500 {object}  entities.ErrorMessage
 func (bh *bookHandler) ReturnABook(c echo.Context) error {
 	// bind request body
 	var req entities.ReturnBookRequest
@@ -115,7 +115,7 @@ func (bh *bookHandler) ReturnABook(c echo.Context) error {
 // @Produce json
 // @Success 200 {object} entities.ShowAllBooksResponse
 // @Router /books [get]
-// @Failure 500 {object}  entity.ErrorMessage
+// @Failure 500 {object}  entities.ErrorMessage
 func (bh *bookHandler) ShowAllBooks(c echo.Context) error {
 	// get all books
 	// bookCopiesPtr, err := bh.bs.GetAllBooks()
@@ -146,7 +146,7 @@ func (bh *bookHandler) ShowAllBooks(c echo.Context) error {
 // @Produce json
 // @Success 200 {object} entities.ShowBorrowedBooksResponse
 // @Router /books [get]
-// @Failure 500 {object}  entity.ErrorMessage
+// @Failure 500 {object}  entities.ErrorMessage
 func (bh *bookHandler) ShowBorrowedBooks(c echo.Context) error {
 	// get all books
 	// bookCopiesPtr, err := bh.bs.GetAllBooks()

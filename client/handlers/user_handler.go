@@ -1,10 +1,15 @@
 package handlers
 
 import (
+	"context"
+	"log"
 	"net/http"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/suryasaputra2016/phase-3-graded-challenge-2/client/entities"
+	"github.com/suryasaputra2016/phase-3-graded-challenge-2/proto/pb"
+	"google.golang.org/grpc"
 )
 
 // user handler interface
@@ -28,7 +33,7 @@ func NewUserHandler() *userHandler {
 // @Accept json
 // @Produce json
 // @Param register-data body entities.RegisterRequest true "register request"
-// @Success 201 {object} entity.RegisterRepsonse
+// @Success 201 {object} entities.RegisterResponse
 // @Router /register [post]
 // @Failure 400 {object} entities.ErrorMessage
 // @Failure 500 {object}  entities.ErrorMessage
@@ -39,22 +44,26 @@ func (uh *userHandler) Register(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid JSON request")
 	}
 
-	// check registration data
-	// if err := uh.us.CheckRegistrationData(req.Email, req.Password); err != nil {
-	// 	return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprint(err))
-	// }
-
-	// create new user
-	// newUserPtr, err := uh.us.CreateNewUser(&req)
-	// if err != nil {
-	// 	return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprint(err))
-	// }
-
-	//define and send response
-	res := entities.RegisterResponse{
-		Message:  "registration success",
-		UserName: "xxxxxxxxxxx",
+	conn, err := grpc.NewClient("localhost:50051", grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("Failed to dial server: %v", err)
 	}
+	defer conn.Close()
+
+	client := pb.NewBookServiceClient(conn)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	res, err := client.Register(ctx, &pb.UserRequest{
+		UserName: req.UserName,
+		Password: req.Password,
+	})
+	if err != nil {
+		log.Fatalf("Failed to greet: %v", err)
+	}
+
+	//send response
 	return c.JSON(http.StatusCreated, res)
 }
 
@@ -75,22 +84,24 @@ func (uh *userHandler) Login(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid JSON request")
 	}
 
-	// check login data
-	// userPtr, err := uh.us.CheckLoginData(req.Email, req.Password)
-	// if err != nil {
-	// 	return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprint(err))
-	// }
-
-	// generate token
-	// t, err := middlewares.GenerateTokenString(string(userPtr.ID), userPtr.Email)
-	// if err != nil {
-	// 	return echo.NewHTTPError(http.StatusInternalServerError, "couldn't generate token")
-	// }
-
-	// define and send response
-	res := entities.LoginResponse{
-		Message: "login success",
-		Token:   "token xxxxxxx",
+	conn, err := grpc.NewClient("localhost:50051", grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("Failed to dial server: %v", err)
 	}
+	defer conn.Close()
+
+	client := pb.NewBookServiceClient(conn)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	res, err := client.Login(ctx, &pb.UserRequest{
+		UserName: req.UserName,
+		Password: req.Password,
+	})
+	if err != nil {
+		log.Fatalf("Failed to greet: %v", err)
+	}
+
 	return c.JSON(http.StatusOK, res)
 }
