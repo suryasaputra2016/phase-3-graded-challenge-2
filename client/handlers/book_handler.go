@@ -8,7 +8,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/suryasaputra2016/phase-3-graded-challenge-2/client/entities"
-	"github.com/suryasaputra2016/phase-3-graded-challenge-2/proto/pb"
+	"github.com/suryasaputra2016/phase-3-graded-challenge-2/client/proto/pb"
 	"google.golang.org/grpc"
 )
 

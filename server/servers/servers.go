@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/suryasaputra2016/phase-3-graded-challenge-2/proto/pb"
 	"github.com/suryasaputra2016/phase-3-graded-challenge-2/server/middlewares"
+	"github.com/suryasaputra2016/phase-3-graded-challenge-2/server/proto/pb"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/suryasaputra2016/phase-3-graded-challenge-2/server/entities"
