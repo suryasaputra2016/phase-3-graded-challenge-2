@@ -81,6 +81,52 @@ func (s *Server) BorrowABook(ctx context.Context, req *pb.BookRequest) (*pb.Book
 	}, nil
 }
 
+// show all books
+func (s *Server) ShowAllBooks(ctx context.Context, req *pb.BookRequest) (*pb.AllBookResponse, error) {
+	books, err := repos.GetAllBooks()
+	if err != nil {
+		return &pb.AllBookResponse{}, err
+	}
+
+	var resbooks []*pb.BookItemResponse
+	for _, book := range books {
+		resbook := pb.BookItemResponse{
+			BookID:        book.ID.Hex(),
+			Title:         book.Title,
+			Author:        book.Author,
+			PublishedDate: book.PublishedDate.Format("2006-01-02"),
+			Status:        book.Status,
+		}
+		resbooks = append(resbooks, &resbook)
+	}
+
+	return &pb.AllBookResponse{AllBookResponse: resbooks}, err
+}
+
+// show borrowed books
+func (s *Server) ShowBorrowedBooks(ctx context.Context, req *pb.BookRequest) (*pb.AllBorrowedBookResponse, error) {
+	userID, err := primitive.ObjectIDFromHex(middlewares.GetUserID(""))
+	if err != nil {
+		return &pb.AllBorrowedBookResponse{}, err
+	}
+
+	books, err := repos.GetBorrowedBooks(userID.String())
+	if err != nil {
+		return &pb.AllBorrowedBookResponse{}, err
+	}
+
+	var resbooks []*pb.BorrowedBookResponse
+	for _, book := range books {
+		resbook := pb.BorrowedBookResponse{
+			BookID:       book.ID.Hex(),
+			BorrowedDate: book.BorrowedDate.Format("2006-01-02"),
+		}
+		resbooks = append(resbooks, &resbook)
+	}
+
+	return &pb.AllBorrowedBookResponse{AllBorrowedBookResponse: resbooks}, err
+}
+
 // CheckRegistrationData checks if username, and password are well formatted and username hasn't been used
 func CheckRegistrationData(username, password string) error {
 	// username validation
@@ -100,16 +146,6 @@ func CheckRegistrationData(username, password string) error {
 	}
 
 	return nil
-}
-
-// show all books
-func (s *Server) ShowAllBooks(ctx context.Context) ([]entities.Book, error) {
-
-}
-
-// show borrowed books
-func (s *Server) ShowBorrowedBooks(ctx context.Context, userID string) ([]entities.BorrowedBook, error) {
-
 }
 
 // CreateNewUser accepts registration data and returns new user

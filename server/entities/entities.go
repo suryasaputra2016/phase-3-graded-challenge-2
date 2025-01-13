@@ -18,7 +18,7 @@ type Book struct {
 	ID            primitive.ObjectID `bson:"_id,omitempty"`
 	Title         string
 	Author        string
-	PublishedDate string
+	PublishedDate time.Time
 	Status        string
 	UserID        primitive.ObjectID `bson:"_user_id,omitempty"`
 }

@@ -9,15 +9,9 @@ definitions:
     type: object
   entities.BorrowBookResponse:
     properties:
-      book_author:
-        type: string
-      book_title:
-        type: string
       message:
         type: string
     required:
-    - book_author
-    - book_title
     - message
     type: object
   entities.ErrorMessage:
@@ -138,7 +132,9 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entities.ShowBorrowedBooksResponse'
+            items:
+              $ref: '#/definitions/entities.ShowBorrowedBooksResponse'
+            type: array
         "500":
           description: Internal Server Error
           schema:

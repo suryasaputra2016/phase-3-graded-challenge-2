@@ -37,7 +37,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.ShowBorrowedBooksResponse"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.ShowBorrowedBooksResponse"
+                            }
                         }
                     },
                     "500": {
@@ -259,17 +262,9 @@ const docTemplate = `{
         "entities.BorrowBookResponse": {
             "type": "object",
             "required": [
-                "book_author",
-                "book_title",
                 "message"
             ],
             "properties": {
-                "book_author": {
-                    "type": "string"
-                },
-                "book_title": {
-                    "type": "string"
-                },
                 "message": {
                     "type": "string"
                 }

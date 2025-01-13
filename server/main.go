@@ -19,7 +19,7 @@ func main() {
 
 	grpcServer := grpc.NewServer()
 
-	pb.RegisterGreetServiceServer(grpcServer, &servers.Server{})
+	pb.RegisterBookServiceServer(grpcServer, &servers.Server{})
 
 	reflection.Register(grpcServer)
 

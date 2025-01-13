@@ -22,15 +22,3 @@ func (m *UserRepoMock) GetUserByUsername(id int) (*entities.User, error) {
 	user := res.Get(0).(entities.User)
 	return &user, nil
 }
-
-// FindUserByEmail gets user with email mock
-func (m *UserRepoMock) FindUserByEmail(email string) (*entities.User, error) {
-	res := m.Mock.Called(email)
-
-	if res.Get(0) == nil {
-		return nil, errors.New("user email not found")
-	}
-
-	user := res.Get(0).(entities.User)
-	return &user, nil
-}

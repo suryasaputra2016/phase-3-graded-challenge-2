@@ -9,7 +9,7 @@ import (
 )
 
 // Get all books
-func GetAllBooks(userName string) ([]entities.Book, error) {
+func GetAllBooks() ([]entities.Book, error) {
 	collection, err := configs.BookDatabase(context.Background())
 	if err != nil {
 		return []entities.Book{}, err
