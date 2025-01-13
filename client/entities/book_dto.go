@@ -7,9 +7,7 @@ type BorrowBookRequest struct {
 
 // borrow book response dto
 type BorrowBookResponse struct {
-	Message    string `json:"message" validate:"required, message"`
-	BookTitle  string `json:"book_title" validate:"required, book_title"`
-	BookAuthor string `json:"book_author" validate:"required, book_author"`
+	Message string `json:"message" validate:"required, message"`
 }
 
 // return book request dto

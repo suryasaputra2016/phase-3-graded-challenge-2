@@ -12,7 +12,7 @@ type UserRepoMock struct {
 	Mock mock.Mock
 }
 
-func (m *UserRepoMock) FindUserByID(id int) (*entities.User, error) {
+func (m *UserRepoMock) GetUserByUsername(id int) (*entities.User, error) {
 	res := m.Mock.Called(id)
 
 	if res.Get(0) == nil {

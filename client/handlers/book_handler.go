@@ -1,10 +1,15 @@
 package handlers
 
 import (
+	"context"
+	"log"
 	"net/http"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/suryasaputra2016/phase-3-graded-challenge-2/client/entities"
+	"github.com/suryasaputra2016/phase-3-graded-challenge-2/proto/pb"
+	"google.golang.org/grpc"
 )
 
 // book handler interface
@@ -42,24 +47,22 @@ func (bh *bookHandler) BorrowABook(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid JSON request")
 	}
 
-	// check book rental requirements
-	// userID := middlewares.GetUserID(c.Get("user"))
-	// bookPtr, userPtr, err := bh.bs.CheckBookRentalRequirements(req.Title, req.Author, userID)
-	// if err != nil {
-	// 	return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprint(err))
-	// }
+	conn, err := grpc.NewClient("localhost:50051", grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("Failed to dial server: %v", err)
+	}
+	defer conn.Close()
 
-	// process book rental
-	// newRent, err := bh.bs.ProcessBookRental(bookPtr, userPtr)
-	// if err != nil {
-	// 	return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprint(err))
-	// }
+	client := pb.NewBookServiceClient(conn)
 
-	// define and send response
-	res := entities.BorrowBookResponse{
-		Message:    "borrow success",
-		BookTitle:  "xxxx",
-		BookAuthor: "xxxxxxx",
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	res, err := client.BorrowABook(ctx, &pb.BookRequest{
+		BookID: req.BookID,
+	})
+	if err != nil {
+		log.Fatalf("Failed to login: %v", err)
 	}
 	return c.JSON(http.StatusOK, res)
 }
@@ -82,29 +85,22 @@ func (bh *bookHandler) ReturnABook(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "JSON request is invalid")
 	}
 
-	// check book return requirements
-	// userID := middlewares.GetUserID(c.Get("user"))
-	// rentPtr, err := bh.bs.CheckBookReturnRequirements(req.Title, req.Author, req.CopyNumber, userID)
-	// if err != nil {
-	// 	return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprint(err))
-	// }
+	conn, err := grpc.NewClient("localhost:50051", grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("Failed to dial server: %v", err)
+	}
+	defer conn.Close()
 
-	// process book return
-	// copyPtr, err := bh.bs.ProcessBookReturn(rentPtr)
-	// if err != nil {
-	// 	return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprint(err))
-	// }
+	client := pb.NewBookServiceClient(conn)
 
-	// record in rent history
-	// if err = bh.bs.StoreRentHistory(uint(userID), copyPtr.ID, "return"); err != nil {
-	// 	return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprint(err))
-	// }
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
 
-	// define and send response
-	res := entities.ReturnBookResponse{
-		Message:    "return success",
-		BookTitle:  "Book xxx",
-		BookAuthor: "Book xxx",
+	res, err := client.ReturnABook(ctx, &pb.BookRequest{
+		BookID: req.BookID,
+	})
+	if err != nil {
+		log.Fatalf("Failed to login: %v", err)
 	}
 	return c.JSON(http.StatusOK, res)
 }
@@ -113,28 +109,27 @@ func (bh *bookHandler) ReturnABook(c echo.Context) error {
 // @Description Show All Books in the library
 // @Tags books
 // @Produce json
-// @Success 200 {object} entities.ShowAllBooksResponse
+// @Success 200 {object} []entities.ShowAllBooksResponse
 // @Router /books [get]
 // @Failure 500 {object}  entities.ErrorMessage
 func (bh *bookHandler) ShowAllBooks(c echo.Context) error {
-	// get all books
-	// bookCopiesPtr, err := bh.bs.GetAllBooks()
-	// if err != nil {
-	// 	return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprint(err))
-	// }
 
-	// define and send response
-	var res []entities.ShowAllBooksResponse
-	var copyResponse entities.ShowAllBooksResponse
-	for _, copy := range []string{"xxxxx"} { //*bookCopiesPtr {
-		copyResponse = entities.ShowAllBooksResponse{
-			BookID:        copy,
-			Title:         "",
-			Author:        "",
-			PublishedDate: "",
-			Status:        "",
-		}
-		res = append(res, copyResponse)
+	conn, err := grpc.NewClient("localhost:50051", grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("Failed to dial server: %v", err)
+	}
+	defer conn.Close()
+
+	client := pb.NewBookServiceClient(conn)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	res, err := client.ShowAllBook(ctx, &pb.BookRequest{
+		BookID: "",
+	})
+	if err != nil {
+		log.Fatalf("Failed to login: %v", err)
 	}
 
 	return c.JSON(http.StatusOK, res)
@@ -144,25 +139,26 @@ func (bh *bookHandler) ShowAllBooks(c echo.Context) error {
 // @Description Show Borrowed Books in the library
 // @Tags books
 // @Produce json
-// @Success 200 {object} entities.ShowBorrowedBooksResponse
+// @Success 200 {object} []entities.ShowBorrowedBooksResponse
 // @Router /books [get]
 // @Failure 500 {object}  entities.ErrorMessage
 func (bh *bookHandler) ShowBorrowedBooks(c echo.Context) error {
-	// get all books
-	// bookCopiesPtr, err := bh.bs.GetAllBooks()
-	// if err != nil {
-	// 	return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprint(err))
-	// }
+	conn, err := grpc.NewClient("localhost:50051", grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("Failed to dial server: %v", err)
+	}
+	defer conn.Close()
 
-	// define and send response
-	var res []entities.ShowBorrowedBooksResponse
-	var copyResponse entities.ShowBorrowedBooksResponse
-	for _, copy := range []string{"xxxxx"} { //*bookCopiesPtr {
-		copyResponse = entities.ShowBorrowedBooksResponse{
-			BookID:       copy,
-			BorrowedDate: "",
-		}
-		res = append(res, copyResponse)
+	client := pb.NewBookServiceClient(conn)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	res, err := client.ShowBorrowedBook(ctx, &pb.BorrowedBookRequest{
+		UserID: "",
+	})
+	if err != nil {
+		log.Fatalf("Failed to login: %v", err)
 	}
 
 	return c.JSON(http.StatusOK, res)

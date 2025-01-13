@@ -4,9 +4,8 @@ import (
 	"log"
 	"net"
 
-	// pb "go-grpc-server/pb"
-
-	// "github.com/suryasaputra2016/phase-3-graded-challenge-2/userserver/servers"
+	"github.com/suryasaputra2016/phase-3-graded-challenge-2/proto/pb"
+	"github.com/suryasaputra2016/phase-3-graded-challenge-2/server/servers"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -20,7 +19,7 @@ func main() {
 
 	grpcServer := grpc.NewServer()
 
-	// pb.RegisterGreetServiceServer(grpcServer, &servers.Server{})
+	pb.RegisterGreetServiceServer(grpcServer, &servers.Server{})
 
 	reflection.Register(grpcServer)
 

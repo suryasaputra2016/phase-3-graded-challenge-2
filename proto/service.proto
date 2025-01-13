@@ -4,25 +4,57 @@ package books;
 option go_package = "/pb;pb";
 
 service BookService {
-    rpc CheckRegistrationData (userData) returns ();
-    rpc CreateNewUser (userData) returns (UserName);
-    rpc CheckLoginData (userData) returns ();
-    rpc ShowAllBooks () returns (repeated Books);
-    rpc ShowBorrowedBooks () returns (repeated BorrowedBooks);
-    rpc ReturnABook () returns ();
-    rpc BorrowABook () returns ();
+    rpc Register (UserRequest) returns (RegisterResponse);
+    rpc Login (UserRequest) returns (LoginResponse);
+    rpc BorrowABook (BookRequest) returns (BookResponse);
+    rpc ReturnABook (BookRequest) returns (BookResponse);
+    rpc ShowAllBook (BookRequest) returns (AllBookResponse);
+    rpc ShowBorrowedBook (BorrowedBookRequest) returns (AllBorrowedBookResponse);
 }
 
-message UserData {
-    string username = 1;
+message AllBookResponse {
+    repeated BookItemResponse AllBookResponse = 1;
+}
+
+message AllBorrowedBookResponse {
+    repeated BorrowedBookResponse AllBorrowedBookResponse = 1;
+}
+
+message BookItemResponse {
+    string BookID = 1;
+    string Title = 2;
+    string Author = 3;
+    string PublishedDate = 4;
+    string Status = 5;
+}
+
+message BorrowedBookResponse {
+    string BookID = 1;
+    string BorrowedDate = 2;
+}
+
+message BorrowedBookRequest {
+    string UserID = 1;
+}
+
+message BookRequest {
+	string BookID  = 1;
+}
+
+message BookResponse {
+	string Message    = 1;
+}
+
+message UserRequest {
+    string UserName = 1;
     string password = 2;
 }
 
-message UserName {
-    string username = 1;
+message RegisterResponse {
+    string UserName = 1;
 }
 
-message BookAndUserID {
-    string BookID = 1;
-    string UserID = 2;
+message LoginResponse {
+    string UserName = 1;
+    string token = 2;
 }

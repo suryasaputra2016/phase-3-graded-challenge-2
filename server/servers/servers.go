@@ -4,8 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
-	// pb "go-grpc-server/pb"
+	"github.com/suryasaputra2016/phase-3-graded-challenge-2/proto/pb"
+	"github.com/suryasaputra2016/phase-3-graded-challenge-2/server/middlewares"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/suryasaputra2016/phase-3-graded-challenge-2/server/entities"
 	"github.com/suryasaputra2016/phase-3-graded-challenge-2/server/repos"
@@ -13,11 +16,73 @@ import (
 )
 
 type Server struct {
-	// pb.UnimplementedGreetServiceServer
+	pb.UnimplementedBookServiceServer
+}
+
+func (s *Server) Register(ctx context.Context, req *pb.UserRequest) (*pb.RegisterResponse, error) {
+	err := CheckRegistrationData(req.UserName, req.Password)
+	if err != nil {
+		return &pb.RegisterResponse{}, err
+	}
+
+	res, err := CreateNewUser(req.UserName, req.Password)
+	if err != nil {
+		return &pb.RegisterResponse{}, err
+	}
+
+	return &pb.RegisterResponse{UserName: res}, nil
+}
+
+func (s *Server) Login(ctx context.Context, req *pb.UserRequest) (*pb.LoginResponse, error) {
+	id, err := CheckLoginData(req.UserName, req.Password)
+	if err != nil {
+		return &pb.LoginResponse{}, err
+	}
+
+	// generate token
+	t, err := middlewares.GenerateTokenString(id, req.UserName)
+	if err != nil {
+		return &pb.LoginResponse{}, errors.New("couldn't generate token")
+	}
+
+	return &pb.LoginResponse{UserName: req.UserName, Token: t}, nil
+}
+
+func (s *Server) ReturnABook(ctx context.Context, req *pb.BookRequest) (*pb.BookResponse, error) {
+	err := repos.DeleteBorrowedBooks(req.BookID)
+	if err != nil {
+		return &pb.BookResponse{}, err
+	}
+
+	return &pb.BookResponse{
+		Message: "Return succeed",
+	}, nil
+}
+
+func (s *Server) BorrowABook(ctx context.Context, req *pb.BookRequest) (*pb.BookResponse, error) {
+	bookID, err := primitive.ObjectIDFromHex(req.BookID)
+	if err != nil {
+		return &pb.BookResponse{}, err
+	}
+	userID, err := primitive.ObjectIDFromHex(middlewares.GetUserID(""))
+	if err != nil {
+		return &pb.BookResponse{}, err
+	}
+
+	borowedBook := entities.BorrowedBook{
+		BookID:       bookID,
+		UserID:       userID,
+		BorrowedDate: time.Now(),
+	}
+	repos.AddBorrowedBooks(borowedBook)
+
+	return &pb.BookResponse{
+		Message: "Borrow succeed",
+	}, nil
 }
 
 // CheckRegistrationData checks if username, and password are well formatted and username hasn't been used
-func (s *Server) CheckRegistrationData(ctx context.Context, username, password string) error {
+func CheckRegistrationData(username, password string) error {
 	// username validation
 	if username == "" {
 		return errors.New("username must not be empty")
@@ -37,8 +102,18 @@ func (s *Server) CheckRegistrationData(ctx context.Context, username, password s
 	return nil
 }
 
+// show all books
+func (s *Server) ShowAllBooks(ctx context.Context) ([]entities.Book, error) {
+
+}
+
+// show borrowed books
+func (s *Server) ShowBorrowedBooks(ctx context.Context, userID string) ([]entities.BorrowedBook, error) {
+
+}
+
 // CreateNewUser accepts registration data and returns new user
-func (s *Server) CreateNewUser(ctx context.Context, username, password string) (string, error) {
+func CreateNewUser(username, password string) (string, error) {
 	// hash password
 	passwordHash, err := utils.GenerateHash(password)
 	if err != nil {
@@ -65,35 +140,17 @@ func (s *Server) CreateNewUser(ctx context.Context, username, password string) (
 }
 
 // CheckRegistrationData checks if username, and password are well formatted and username hasn't been used
-func (s *Server) CheckLoginData(ctx context.Context, username, password string) error {
+func CheckLoginData(username, password string) (string, error) {
 	// check email and get user
 	user, err := repos.GetUserByUsername(username)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	// check password
 	if err := utils.CheckPassword(password, user.PasswordHash); err != nil {
-		return err
+		return "", err
 	}
 
-	return nil
-}
-
-// show all books
-func (s *Server) ShowAllBooks(ctx context.Context) ([]entities.Book, error) {
-
-}
-
-// show borrowed books
-func (s *Server) ShowBorrowedBooks(ctx context.Context, userID string) ([]entities.BorrowedBook, error) {
-
-}
-
-func (s *Server) ReturnABook(ctx context.Context, userID, bookID string) error {
-
-}
-
-func (s *Server) BorrowABook(ctx context.Context, userID, bookID string) error {
-
+	return user.ID.Hex(), nil
 }

@@ -60,7 +60,7 @@ func (uh *userHandler) Register(c echo.Context) error {
 		Password: req.Password,
 	})
 	if err != nil {
-		log.Fatalf("Failed to greet: %v", err)
+		log.Fatalf("Failed to login: %v", err)
 	}
 
 	//send response
@@ -100,7 +100,7 @@ func (uh *userHandler) Login(c echo.Context) error {
 		Password: req.Password,
 	})
 	if err != nil {
-		log.Fatalf("Failed to greet: %v", err)
+		log.Fatalf("Failed to login: %v", err)
 	}
 
 	return c.JSON(http.StatusOK, res)
