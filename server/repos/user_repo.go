@@ -24,18 +24,18 @@ func CreateUser(newUser entities.User) error {
 }
 
 // Get User by username
-func GetUserByUsername(userName string) error {
+func GetUserByUsername(userName string) (entities.User, error) {
 	collection, err := configs.UserDatabase(context.Background())
 	if err != nil {
-		return err
+		return entities.User{}, err
 	}
 
 	// get user
 	var user entities.User
 	err = collection.FindOne(context.Background(), bson.M{"userName": userName}).Decode(&user)
 	if err != nil {
-		return err
+		return entities.User{}, err
 	}
 
-	return nil
+	return user, nil
 }

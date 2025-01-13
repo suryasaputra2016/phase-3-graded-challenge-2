@@ -55,11 +55,6 @@ func (bh *bookHandler) BorrowABook(c echo.Context) error {
 	// 	return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprint(err))
 	// }
 
-	// record in rent history
-	// if err = bh.bs.StoreRentHistory(uint(userID), bookPtr.BookCopies[0].ID, "take"); err != nil {
-	// 	return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprint(err))
-	// }
-
 	// define and send response
 	res := entities.BorrowBookResponse{
 		Message:    "borrow success",

@@ -82,7 +82,7 @@ func (uh *userHandler) Login(c echo.Context) error {
 	// }
 
 	// generate token
-	// t, err := middlewares.GenerateTokenString(int(userPtr.ID), userPtr.Email)
+	// t, err := middlewares.GenerateTokenString(string(userPtr.ID), userPtr.Email)
 	// if err != nil {
 	// 	return echo.NewHTTPError(http.StatusInternalServerError, "couldn't generate token")
 	// }

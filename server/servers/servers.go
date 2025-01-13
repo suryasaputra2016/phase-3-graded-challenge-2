@@ -29,7 +29,8 @@ func (s *Server) CheckRegistrationData(ctx context.Context, username, password s
 	}
 
 	// check username is already in use
-	if repos.GetUserByUsername(username) == nil {
+	_, err := repos.GetUserByUsername(username)
+	if err == nil {
 		return errors.New("validating registration data: email already in use")
 	}
 
@@ -61,4 +62,38 @@ func (s *Server) CreateNewUser(ctx context.Context, username, password string) (
 	}
 
 	return username, nil
+}
+
+// CheckRegistrationData checks if username, and password are well formatted and username hasn't been used
+func (s *Server) CheckLoginData(ctx context.Context, username, password string) error {
+	// check email and get user
+	user, err := repos.GetUserByUsername(username)
+	if err != nil {
+		return err
+	}
+
+	// check password
+	if err := utils.CheckPassword(password, user.PasswordHash); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// show all books
+func (s *Server) ShowAllBooks(ctx context.Context) ([]entities.Book, error) {
+
+}
+
+// show borrowed books
+func (s *Server) ShowBorrowedBooks(ctx context.Context, userID string) ([]entities.BorrowedBook, error) {
+
+}
+
+func (s *Server) ReturnABook(ctx context.Context, userID, bookID string) error {
+
+}
+
+func (s *Server) BorrowABook(ctx context.Context, userID, bookID string) error {
+
 }

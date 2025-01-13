@@ -3,9 +3,14 @@ syntax = "proto3";
 package books;
 option go_package = "/pb;pb";
 
-service UserService {
+service BookService {
     rpc CheckRegistrationData (userData) returns ();
     rpc CreateNewUser (userData) returns (UserName);
+    rpc CheckLoginData (userData) returns ();
+    rpc ShowAllBooks () returns (repeated Books);
+    rpc ShowBorrowedBooks () returns (repeated BorrowedBooks);
+    rpc ReturnABook () returns ();
+    rpc BorrowABook () returns ();
 }
 
 message UserData {
@@ -15,4 +20,9 @@ message UserData {
 
 message UserName {
     string username = 1;
+}
+
+message BookAndUserID {
+    string BookID = 1;
+    string UserID = 2;
 }
